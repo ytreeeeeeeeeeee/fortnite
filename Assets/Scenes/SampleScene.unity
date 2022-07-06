@@ -233,7 +233,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4207293392497186, guid: 11aaea5348574644a9eb4f4504fcce3f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.33
+      value: -1.48
       objectReference: {fileID: 0}
     - target: {fileID: 4207293392497186, guid: 11aaea5348574644a9eb4f4504fcce3f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -241,7 +241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4207293392497186, guid: 11aaea5348574644a9eb4f4504fcce3f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.22
+      value: 4.11
       objectReference: {fileID: 0}
     - target: {fileID: 4207293392497186, guid: 11aaea5348574644a9eb4f4504fcce3f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -454,8 +454,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floor: {fileID: 8822627481051373085, guid: 25ff335eb91cd6a4ab493d79885ebf40, type: 3}
   floorEx: {fileID: 7340888626461651186, guid: c746b3fd4d9bd054e926803f2e89ad0a, type: 3}
-  wall: {fileID: 7520339778626307340, guid: 954b06cabfa462245b0b84eecc310dae, type: 3}
-  wallEx: {fileID: 3000423593130870378, guid: d43c1340e2948514b882de99c1534dd3, type: 3}
+  wall: {fileID: 6902995409619813625, guid: 954b06cabfa462245b0b84eecc310dae, type: 3}
+  wallEx: {fileID: 987440187295989578, guid: d43c1340e2948514b882de99c1534dd3, type: 3}
+  ramp: {fileID: 8364921846245414471, guid: cebac0d727aac6c4a857c4a353d10f98, type: 3}
+  rampEx: {fileID: 589130625537072282, guid: c5aa5e9ba967fc545adecd19e9e192bd, type: 3}
 --- !u!1 &2007993983
 GameObject:
   m_ObjectHideFlags: 0
