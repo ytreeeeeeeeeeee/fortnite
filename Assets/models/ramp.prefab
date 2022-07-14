@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 5400563783249277394}
   - component: {fileID: 1116868971608496269}
   - component: {fileID: 6236775217190446630}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ramp
-  m_TagString: Untagged
+  m_TagString: rampCheck
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

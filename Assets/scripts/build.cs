@@ -11,7 +11,8 @@ public class build : MonoBehaviour
     [SerializeField] GameObject ramp;
     [SerializeField] GameObject rampEx;
     
-    GameObject example;
+    public GameObject example;
+    
     string typeBuilding;
     void Start()
     {
@@ -43,12 +44,24 @@ public class build : MonoBehaviour
         {
             case "floor":
                 CreateFloor();
+                if (Input.GetMouseButtonDown(0) && example)
+                {
+                    Instantiate(floor, example.transform.position, example.transform.rotation);
+                }
                 break;
             case "wall":
                 CreateWall();
+                if (Input.GetMouseButtonDown(0) && example)
+                {
+                    Instantiate(wall, example.transform.position, example.transform.rotation);
+                }
                 break;
             case "ramp":
                 CreateRamp();
+                if (Input.GetMouseButtonDown(0) && example)
+                {
+                    Instantiate(ramp, example.transform.position, example.transform.rotation);
+                }
                 break;
             case "nothing":
                 Destroy(example);
@@ -61,16 +74,15 @@ public class build : MonoBehaviour
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, transform.forward, out hit))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 6))
         {
-            print(hit.point);
-            print(Mathf.RoundToInt((hit.point.x + 0.4f) / 3) * 3);
-            print(Mathf.RoundToInt(hit.point.x / 3) * 3);
-            if (Vector3.Distance(transform.position, hit.point) <= 6)
+
+            Vector3 pos = new Vector3(Mathf.Abs(Mathf.RoundToInt(hit.point.x / 3) * 3 - hit.point.x) > 0.8f ? (Mathf.RoundToInt(hit.point.x / 3) * 3 - hit.point.x < 0 ? Mathf.RoundToInt((hit.point.x + 0.85f) / 3) * 3 : Mathf.RoundToInt((hit.point.x - 0.85f) / 3) * 3) : Mathf.RoundToInt(hit.point.x / 3) * 3, 
+                (Mathf.RoundToInt(hit.point.y) != 0 ? Mathf.RoundToInt(hit.point.y / 3) * 3 : 0) + floorEx.transform.localScale.y / 2,
+                Mathf.Abs(Mathf.RoundToInt(hit.point.z / 3) * 3 - hit.point.z) > 0.8f ? (Mathf.RoundToInt(hit.point.z / 3) * 3 - hit.point.z < 0 ? Mathf.RoundToInt((hit.point.z + 0.85f) / 3) * 3 : Mathf.RoundToInt((hit.point.z - 0.85f) / 3) * 3) : Mathf.RoundToInt(hit.point.z / 3) * 3);
+            Collider[] checkBuildings = Physics.OverlapBox(pos, new Vector3(0.5f, 0.05f, 0.5f), Quaternion.identity, 1 << 6);
+            if (checkBuildings.Length == 0)
             {
-                Vector3 pos = new Vector3(Mathf.Abs(Mathf.RoundToInt(hit.point.x / 3) * 3 - hit.point.x) > 0.35f ? (hit.point.x > 0 ? Mathf.RoundToInt((hit.point.x + 0.4f) / 3) * 3 : Mathf.RoundToInt((hit.point.x - 0.4f) / 3) * 3) : Mathf.RoundToInt(hit.point.x / 3) * 3, 
-                    (Mathf.RoundToInt(hit.point.y) != 0 ? Mathf.RoundToInt(hit.point.y / 3) * 3 : 0) + floorEx.transform.localScale.y / 2,
-                    Mathf.Abs(Mathf.RoundToInt(hit.point.z / 3) * 3 - hit.point.z) > 0.35f ? (hit.point.z > 0 ? Mathf.RoundToInt((hit.point.z + 0.4f) / 3) * 3 : Mathf.RoundToInt((hit.point.z - 0.4f) / 3) * 3) : Mathf.RoundToInt(hit.point.z / 3) * 3);
                 if (example == null)
                 {
                     example = Instantiate(floorEx, pos, Quaternion.identity);
@@ -84,23 +96,22 @@ public class build : MonoBehaviour
             {
                 Destroy(example);
             }
-            if (Input.GetMouseButtonDown(0))
-            {
-                Instantiate(floor, example.transform.position, example.transform.rotation);
-            }
+        }
+        else
+        {
+            Destroy(example);
         }
     }
     void CreateWall()
     {
         RaycastHit hit;
+        bool check = false;
 
-        if (Physics.Raycast(transform.position, transform.forward, out hit))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 6))
         {
-            if (Vector3.Distance(transform.position, hit.point) <= 6)
-            {
-                Vector3 pos = new Vector3(Mathf.RoundToInt(hit.point.x) != 0 ? Mathf.RoundToInt(hit.point.x / 3) * 3 : 0,
-                    (Mathf.RoundToInt(hit.point.y) != 0 ? Mathf.RoundToInt(hit.point.y / 3) * 3 : 0) + 1.5f,
-                    Mathf.RoundToInt(hit.point.z) != 0 ? Mathf.RoundToInt(hit.point.z / 3) * 3 : 0);
+            Vector3 pos = new Vector3(Mathf.RoundToInt(hit.point.x) != 0 ? Mathf.RoundToInt(hit.point.x / 3) * 3 : 0,
+                (Mathf.RoundToInt(hit.point.y) != 0 ? Mathf.RoundToInt(hit.point.y / 3) * 3 : 0) + 1.5f,
+                Mathf.RoundToInt(hit.point.z) != 0 ? Mathf.RoundToInt(hit.point.z / 3) * 3 : 0);
                 if (example == null)
                 {
                     example = Instantiate(wallEx, pos, Quaternion.identity);
@@ -110,28 +121,24 @@ public class build : MonoBehaviour
                     example.transform.position = pos;
                     example.transform.eulerAngles = new Vector3(0, Mathf.RoundToInt(transform.eulerAngles.y) != 0 ? Mathf.RoundToInt(transform.eulerAngles.y / 90) * 90 : 0, 0);
                 }
-            }
-            else
-            {
-                Destroy(example);
-            }
-            if (Input.GetMouseButtonDown(0))
-            {
-                Instantiate(wall, example.transform.position, example.transform.rotation);
-            }
+        }
+        else
+        {
+            Destroy(example);
         }
     }
     void CreateRamp()
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, transform.forward, out hit))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 6))
         {
-            if (Vector3.Distance(transform.position, hit.point) <= 6)
-            {
-                Vector3 pos = new Vector3(Mathf.Abs(Mathf.RoundToInt(hit.point.x / 3) * 3 - hit.point.x) > 0.35f ? (hit.point.x > 0 ? Mathf.RoundToInt((hit.point.x + 0.4f) / 3) * 3 : Mathf.RoundToInt((hit.point.x - 0.4f) / 3) * 3) : Mathf.RoundToInt(hit.point.x / 3) * 3,
+            Vector3 pos = new Vector3(Mathf.Abs(Mathf.RoundToInt(hit.point.x / 3) * 3 - hit.point.x) > 0.8f ? (Mathf.RoundToInt(hit.point.x / 3) * 3 - hit.point.x < 0 ? Mathf.RoundToInt((hit.point.x + 0.85f) / 3) * 3 : Mathf.RoundToInt((hit.point.x - 0.85f) / 3) * 3) : Mathf.RoundToInt(hit.point.x / 3) * 3, 
                     (Mathf.RoundToInt(hit.point.y) != 0 ? Mathf.RoundToInt(hit.point.y / 3) * 3 : 0) + 1.5f,
-                    Mathf.Abs(Mathf.RoundToInt(hit.point.z / 3) * 3 - hit.point.z) > 0.35f ? (hit.point.z > 0 ? Mathf.RoundToInt((hit.point.z + 0.4f) / 3) * 3 : Mathf.RoundToInt((hit.point.z - 0.4f) / 3) * 3) : Mathf.RoundToInt(hit.point.z / 3) * 3);
+                    Mathf.Abs(Mathf.RoundToInt(hit.point.z / 3) * 3 - hit.point.z) > 0.8f ? (Mathf.RoundToInt(hit.point.z / 3) * 3 - hit.point.z < 0 ? Mathf.RoundToInt((hit.point.z + 0.85f) / 3) * 3 : Mathf.RoundToInt((hit.point.z - 0.85f) / 3) * 3) : Mathf.RoundToInt(hit.point.z / 3) * 3);
+            Collider[] checkBuildings = Physics.OverlapBox(pos, new Vector3(0.5f, 0.05f, 0.5f), Quaternion.Euler(-45, 0, 0), 1 << 6);
+            if (checkBuildings.Length == 0)
+            {
                 if (example == null)
                 {
                     example = Instantiate(rampEx, pos, Quaternion.identity);
@@ -146,10 +153,10 @@ public class build : MonoBehaviour
             {
                 Destroy(example);
             }
-            if (Input.GetMouseButtonDown(0))
-            {
-                Instantiate(ramp, example.transform.position, example.transform.rotation);
-            }
+        }
+        else
+        {
+            Destroy(example);
         }
     }
 }
